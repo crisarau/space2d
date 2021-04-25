@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Transform _shootingPoint;
     [SerializeField]
-    private float _fireRate = 0.5f;
+    private float _fireRate = 0.25f;
 
     [SerializeField]
     private int _lives = 3;
@@ -107,7 +107,7 @@ public class Player : MonoBehaviour
 
     IEnumerator trippleShotPowerDownRoutine(){
         yield return new WaitForSeconds(5);
-        tripleShotActive = false;
+        tripleShotActive = false; 
     }
 
 }

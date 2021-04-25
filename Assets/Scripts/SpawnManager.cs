@@ -8,6 +8,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyPrefab;
     [SerializeField]
+    private GameObject _triplePowerUpPrefab;
+    [SerializeField]
     private GameObject _enemyContainer;
 
     private bool _stopSpawning = false;
@@ -15,7 +17,8 @@ public class SpawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine("SpawnRoutine");
+        StartCoroutine(SpawnEnemyRoutine());
+        StartCoroutine(SpawnPowerUpRoutine());
     }
 
     // Update is called once per frame
@@ -25,12 +28,20 @@ public class SpawnManager : MonoBehaviour
     }
     //spawn a thing every 5 seconds
     //Ienumerator type allows for yield keyword...pauses and returns execution order back to the caller.
-    IEnumerator SpawnRoutine(){
+    IEnumerator SpawnEnemyRoutine(){
         while(!_stopSpawning){
             GameObject newEnemy = Instantiate(_enemyPrefab, new Vector3(Random.Range(-8f,8f),7.0f), Quaternion.identity);
             //setting it to child of container.
             newEnemy.transform.parent = _enemyContainer.transform;
             yield return new WaitForSeconds(5.0f);
+        }
+    }
+
+
+    IEnumerator SpawnPowerUpRoutine(){
+        while(!_stopSpawning){
+            Instantiate(_triplePowerUpPrefab, new Vector3(Random.Range(-8f,8f),7.0f), Quaternion.identity);
+            yield return new WaitForSeconds(Random.Range(3f,8f)); //3 to 7 seconds
         }
     }
     public void OnPlayerDeath(){
