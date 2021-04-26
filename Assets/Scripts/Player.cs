@@ -25,7 +25,6 @@ public class Player : MonoBehaviour
 
     private SpawnManager _spawnManager;
 
-    // Start is called before the first frame update
     void Start()
     {
         //current position at start.
@@ -38,7 +37,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         CalculateMovement();
