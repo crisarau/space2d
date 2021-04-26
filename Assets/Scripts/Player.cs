@@ -7,7 +7,12 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed = 4.5f;
     [SerializeField]
+    private float _speedMultiplier = 2.0f;
+    [SerializeField]
     private GameObject _laserPrefab;
+
+    [SerializeField]
+    private GameObject _shieldVisual;
     [SerializeField]
     private GameObject _triplePrefab;
     [SerializeField]
@@ -22,6 +27,10 @@ public class Player : MonoBehaviour
     private float verticalInput;
     [SerializeField]
     private bool tripleShotActive = false;
+    [SerializeField]
+    private bool speedBoostActive = false;
+    [SerializeField]
+    private bool shieldActive = false;
 
     private SpawnManager _spawnManager;
 
@@ -35,6 +44,8 @@ public class Player : MonoBehaviour
         if(_spawnManager== null){
             Debug.LogError("The spawnmanager is NULL");
         }
+
+        _shieldVisual.SetActive(false);
     }
 
     void Update()
@@ -59,8 +70,10 @@ public class Player : MonoBehaviour
 
         //normalizsed to solve the diagona speed boost problem
         Vector3 direction = new Vector3(horizontalInput,verticalInput,0).normalized;
-        transform.Translate(direction *  _speed * Time.deltaTime);
 
+        
+        transform.Translate(direction *  _speed * Time.deltaTime);
+        
         //better way to restrict movement in y axis
         float _yClamp = Mathf.Clamp(transform.position.y, -4, 4);
         transform.position = new Vector3(transform.position.x, _yClamp, 0);
@@ -87,6 +100,13 @@ public class Player : MonoBehaviour
     }
 
     public void Damage(){
+
+        if(shieldActive){
+            shieldActive = false;
+            _shieldVisual.SetActive(false);
+            return;
+        }
+
         _lives -= 1;
         if(_lives<1){
             //tell spawn manager that we died so stop spawning.
@@ -106,6 +126,23 @@ public class Player : MonoBehaviour
     IEnumerator trippleShotPowerDownRoutine(){
         yield return new WaitForSeconds(5);
         tripleShotActive = false; 
+    }
+
+    public void SpeedPowerUpActive(){
+        _speed = _speed * _speedMultiplier;
+        speedBoostActive = true;
+        StartCoroutine(speedPowerDownRoutine());
+    }
+
+    IEnumerator speedPowerDownRoutine(){
+        yield return new WaitForSeconds(5);
+        _speed = _speed / _speedMultiplier;
+        speedBoostActive = false;
+    }
+
+    public void ShieldPowerUpActive(){
+        _shieldVisual.SetActive(true);
+        shieldActive = true;
     }
 
 }

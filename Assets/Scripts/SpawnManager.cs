@@ -14,6 +14,9 @@ public class SpawnManager : MonoBehaviour
 
     private bool _stopSpawning = false;
 
+    [SerializeField]
+    private GameObject[] powerUps;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,7 +43,7 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnPowerUpRoutine(){
         while(!_stopSpawning){
-            Instantiate(_triplePowerUpPrefab, new Vector3(Random.Range(-8f,8f),7.0f), Quaternion.identity);
+            Instantiate(powerUps[Random.Range(0,powerUps.Length)], new Vector3(Random.Range(-8f,8f),7.0f), Quaternion.identity);
             yield return new WaitForSeconds(Random.Range(3f,8f)); //3 to 7 seconds
         }
     }
