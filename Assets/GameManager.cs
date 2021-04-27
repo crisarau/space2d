@@ -7,11 +7,7 @@ public class GameManager : MonoBehaviour
 {
 
     bool _isGameOver;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    
 
     public void GameOver(){
         _isGameOver = true;
@@ -22,6 +18,10 @@ public class GameManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.R) && _isGameOver){
             SceneManager.LoadScene(1); //our current game scene is 0 in build settings.
+        }
+
+        if(Input.GetKeyDown(KeyCode.Escape)){
+            Application.Quit();
         }
     }
 }
