@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class Player : MonoBehaviour
 {
     [SerializeField]
@@ -33,6 +32,11 @@ public class Player : MonoBehaviour
     private bool shieldActive = false;
 
     private SpawnManager _spawnManager;
+    [SerializeField]
+    private int _score = 0;
+
+    [SerializeField]
+    private UIManager _uiManager;
 
     void Start()
     {
@@ -44,8 +48,13 @@ public class Player : MonoBehaviour
         if(_spawnManager== null){
             Debug.LogError("The spawnmanager is NULL");
         }
-
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        if(_uiManager== null){
+            Debug.LogError("The _uiManager is NULL");
+        }
         _shieldVisual.SetActive(false);
+
+        
     }
 
     void Update()
@@ -54,7 +63,6 @@ public class Player : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space) && Time.time > _nextFire){
             ShootLaser();
         }
-        
     }
 
     void CalculateMovement(){
@@ -108,6 +116,7 @@ public class Player : MonoBehaviour
         }
 
         _lives -= 1;
+        _uiManager.UpdateLives(_lives);
         if(_lives<1){
             //tell spawn manager that we died so stop spawning.
             _spawnManager.OnPlayerDeath();
@@ -143,6 +152,12 @@ public class Player : MonoBehaviour
     public void ShieldPowerUpActive(){
         _shieldVisual.SetActive(true);
         shieldActive = true;
+    }
+
+    public void AddToScore(int points){
+        _score += 10;
+        //tell UIManager
+        _uiManager.UpdateScore(_score);
     }
 
 }
