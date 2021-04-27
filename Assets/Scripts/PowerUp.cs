@@ -11,6 +11,9 @@ public class PowerUp : MonoBehaviour
     //ID for powerup, 0 = triple, 1 = speed, 2 = shield
     [SerializeField]
     private int powerupID;
+
+    [SerializeField]
+    private AudioClip _clip;
     
     void Update()
     {
@@ -24,6 +27,10 @@ public class PowerUp : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.tag == "Player"){
             Player player = other.transform.GetComponent<Player>();
+
+            //this is a static function that allows us to play a sound, and even if this object is destroyed, which happens immediately, this sound will live on in an object and then die when the sound ends.
+            AudioSource.PlayClipAtPoint(_clip, transform.position);
+
             if(player != null){
                 switch(powerupID){
                     case 0:

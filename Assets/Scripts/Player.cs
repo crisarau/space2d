@@ -38,6 +38,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private UIManager _uiManager;
 
+    [SerializeField]
+    private AudioClip _laserSound;
+    private AudioSource _audioSource;
+
     void Start()
     {
         //current position at start.
@@ -54,7 +58,12 @@ public class Player : MonoBehaviour
         }
         _shieldVisual.SetActive(false);
 
-        
+        _audioSource = GetComponent<AudioSource>();
+        if(_audioSource == null){
+            Debug.LogError("The audiosource is NULL");
+        }else{
+            _audioSource.clip  = _laserSound;
+        }
     }
 
     void Update()
@@ -104,7 +113,8 @@ public class Player : MonoBehaviour
         }else{
             Instantiate(_laserPrefab, _shootingPoint.position, Quaternion.identity);
         }
-        
+        //sound effect
+        _audioSource.Play();
     }
 
     public void Damage(){
