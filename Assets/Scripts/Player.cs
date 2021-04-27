@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     private GameObject _laserPrefab;
 
     [SerializeField]
-    private GameObject _shieldVisual;
+    private GameObject _shieldVisual, _rightEngine, _leftEngine;
     [SerializeField]
     private GameObject _triplePrefab;
     [SerializeField]
@@ -116,6 +116,7 @@ public class Player : MonoBehaviour
         }
 
         _lives -= 1;
+        UpdateDamageVisuals(_lives);
         _uiManager.UpdateLives(_lives);
         if(_lives<1){
             //tell spawn manager that we died so stop spawning.
@@ -123,6 +124,18 @@ public class Player : MonoBehaviour
             Death();
         }
     }
+
+    private void UpdateDamageVisuals(int _damage){
+        switch(_damage){
+            case 2:
+                _rightEngine.SetActive(true);
+            break;
+            case 1:
+                _leftEngine.SetActive(true);
+            break;
+        }
+    }
+
     private void Death(){
         Destroy(this.gameObject);
     }
